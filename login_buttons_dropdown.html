@@ -45,9 +45,9 @@
 
 <template name="_loginButtonsLoggedOutAllServices">
   {{#each services}}
-  {{#unless hasPasswordService}}
-    {{> _loginButtonsMessages}}
-  {{/unless}}
+    {{#unless hasPasswordService}}
+      {{> _loginButtonsMessages}}
+    {{/unless}}
     {{#if isPasswordService}}
       {{#if hasOtherServices}} {{! the password service will always come last }}
         {{> _loginButtonsLoggedOutPasswordServiceSeparator}}
@@ -68,9 +68,13 @@
 </template>
 
 <template name="_loginButtonsLoggedOutPasswordService">
+  {{#if doingRequest}}
+    {{> _processingSpinner}}
+  {{/if}}
   {{#if inForgotPasswordFlow}}
     {{> _forgotPasswordForm}}
   {{else}}
+    {{#if inSignupFlow}}<!-- <div class="passwordServiceTitle">Sign Up</div> -->{{/if}}
     {{> _loginButtonsMessages}}
     {{#each fields}}
       {{> _loginButtonsFormField}}
@@ -98,7 +102,14 @@
   {{/if}}
 </template>
 
+<template name="_processingSpinner">
+  <div class="processingSpinner">
+    {{> spinner}}
+  </div>
+</template>
+
 <template name="_forgotPasswordForm">
+  <div class="passwordServiceTitle">Forgot Password</div>
   <div class="login-form">
     {{> _loginButtonsMessages}}
     <div id="forgot-password-email-label-and-input"> {{! XXX we should probably use loginButtonsFormField }}

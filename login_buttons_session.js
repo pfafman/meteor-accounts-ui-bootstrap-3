@@ -7,6 +7,7 @@
     'inForgotPasswordFlow',
     'inChangePasswordFlow',
     'inMessageOnlyFlow',
+    'doingRequest',
 
     'errorMessage',
     'infoMessage',

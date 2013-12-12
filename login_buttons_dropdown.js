@@ -280,6 +280,10 @@
     return !Accounts._options.forbidClientAccountCreation;
   };
 
+  Template._loginButtonsLoggedOutPasswordService.doingRequest = function() {
+    return loginButtonsSession.get('doingRequest');
+  };
+
   Template._loginButtonsFormField.inputType = function () {
     return this.inputType || "text";
   };
@@ -426,16 +430,23 @@
     if (!matchPasswordAgainIfPresent())
       return;
 
+    // UI Feedback for user
+    loginButtonsSession.set('doingRequest', true);
+    
     Accounts.createUser(options, function (error) {
       if (error) {
         loginButtonsSession.errorMessage(error.reason || "Unknown error");
+        loginButtonsSession.set('doingRequest', false);
       } else {
         loginButtonsSession.closeDropdown();
+        loginButtonsSession.set('doingRequest', false);
       }
     });
   };
 
   var forgotPassword = function () {
+    // UI Feedback
+    loginButtonsSession.set('doingRequest', true);
     loginButtonsSession.resetMessages();
 
     var email = trimmedElementValueById("forgot-password-email");
@@ -445,9 +456,11 @@
           loginButtonsSession.errorMessage(error.reason || "Unknown error");
         else
           loginButtonsSession.infoMessage("Email sent");
+        loginButtonsSession.set('doingRequest', false);
       });
     } else {
       loginButtonsSession.infoMessage("Email sent");
+      loginButtonsSession.set('doingRequest', false);
     }
   };
 
